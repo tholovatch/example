@@ -1,12 +1,20 @@
-import falcon
 import waitress
+from flask import Flask, request, jsonify
 
-from app.views import HelloView, MultiplicationView
+app = Flask(__name__)
 
-api = falcon.API()
 
-api.add_route('/', HelloView())
-api.add_route('/multiplication', MultiplicationView())
+@app.route("/hello")
+def hello():
+    return jsonify("Hello World!")
 
-if __name__ == '__main__':
-    waitress.serve(api, port=5000)
+
+@app.route("/multiplicate")
+def multiplicate():
+    x = int(request.args.get('x', 1))
+    y = int(request.args.get('y', 2))
+    return jsonify(x*y)
+
+
+if __name__ == "__main__":
+    waitress.serve(app, port=5000)
